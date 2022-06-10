@@ -207,5 +207,7 @@ def test_discovery(dirs: List[Path], logger=print):
                 for var in lib.__dict__.values():
                     if isinstance(var, TestCase):
                         var.status = STATUS.wait
+    logger('Removing implicit edges')
     remove_implicit_edges([TEST_ROOT], logger)
+    logger('Resolving dependencies')
     propogate_status_none()
