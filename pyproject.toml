@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "entest"
+version = "0.1.0"
+description = "Write dependaent integration tests. See my pycon talk."
+authors = ["Peteris Ratnieks <peteris.ratnieks@zealid.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+black = "^22.3.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+skip-string-normalization = true
+
+[tool.isort]
+profile = "black"
+ensure_newline_before_comments = true
+line_length = 100
+extend_skip = ["submodules"]
