@@ -3,9 +3,9 @@ import os
 import sys
 from pathlib import Path
 
-from src.dependency_decorator import test_discovery
-from src.graph import graph
-from src.runner import run_tests
+from entest.dependency_decorator import test_discovery
+from entest.graph import graph
+from entest.runner import run_tests
 
 
 def echo(*args):

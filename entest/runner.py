@@ -1,7 +1,7 @@
 from typing import Callable
 
-from src.const import STATUS
-from src.dependency_decorator import TEST_ROOT, TestCase
+from entest.const import STATUS
+from entest.dependency_decorator import TEST_ROOT, TestCase
 
 
 def breadth_first_traverse(root: TestCase):

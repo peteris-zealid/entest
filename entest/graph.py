@@ -1,4 +1,4 @@
-from src.dependency_decorator import TEST_ROOT, TestCase
+from entest.dependency_decorator import TEST_ROOT, TestCase
 
 
 def mermaid_edges(node: TestCase):

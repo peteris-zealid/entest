@@ -3,7 +3,7 @@ from inspect import getfullargspec
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set
 
-from src.const import STATUS, display
+from entest.const import STATUS, display
 
 
 class TestCase:
