@@ -1,5 +1,5 @@
 # Entest
-See examples folder.
+See `examples/example_test.py`.
 
 ## Contributing
 Please do not fork! Make a pull request and if it is not obviously bad I will merge it.
