@@ -12,8 +12,10 @@ from entest.runner import run_tests
 def echo(*args):
     return print(" ".join(args))
 
+
 def info(*args):
     print(*args, file=sys.stderr)
+
 
 parser = argparse.ArgumentParser(description='Run integration tests.')
 parser.add_argument('paths', type=str, nargs="*", help='files to run')

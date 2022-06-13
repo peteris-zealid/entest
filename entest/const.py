@@ -1,27 +1,36 @@
 from collections import namedtuple
+from typing import NamedTuple, NewType
+
+StatusType = NewType("StatusType", str)
 
 
-def string_enum(*values: str, name="string_enum"):
-    return namedtuple(name, values)(*values)
+class Status(NamedTuple):
+    wip: StatusType = StatusType("wip")
+    none: StatusType = StatusType("none")
+    wait: StatusType = StatusType("wait")
+    running: StatusType = StatusType("running")
+    deps_failed: StatusType = StatusType("deps_failed")
+    passed: StatusType = StatusType("passed")
+    error: StatusType = StatusType("error")
 
 
-STATUS = string_enum("wip", "none", "wait", "running", "deps_failed", "passed", "error")
+STATUS = Status()
 
 
-def display(s: str):
-    if s == "none":
+def display(s: str) -> str:
+    if s == STATUS.none:
         return "🤷 Ignored"
-    elif s == "wait":
+    elif s == STATUS.wait:
         return "⌛ Not run"
-    elif s == "running":
+    elif s == STATUS.running:
         return "🏃 Running"
-    elif s == "wip":
+    elif s == STATUS.wip:
         return "🚧 WIP    "
-    elif s == "deps_failed":
+    elif s == STATUS.deps_failed:
         return "⛔ Skipped"
-    elif s == "passed":
+    elif s == STATUS.passed:
         return "✅ Passed "
-    elif s == "error":
+    elif s == STATUS.error:
         return "❌ Error  "
     else:
         return s

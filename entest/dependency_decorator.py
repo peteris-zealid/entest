@@ -127,7 +127,7 @@ def empty_setup():
 TEST_ROOT = TestCase(empty_setup, [])  ## make this singleton
 
 
-def setup_setup(callback):
+def setup_setup(callback: Callable[[], None]) -> None:
     TEST_ROOT.func = callback
 
 
