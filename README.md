@@ -1,5 +1,5 @@
 # Entest
-See `examples/example_test.py`.
+See `tests/example.py`.
 
 To have a test implicitly depend on all other tests use `run_last` flag. This is the case for teardown of critical resources for example users.
 
