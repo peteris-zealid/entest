@@ -180,11 +180,11 @@ def remove_implicit_edges(dfs_path: List[TestCase], logger=print):
 
 def propogate_status_none() -> int:
     unvisited = {tc for tc in TestCase.full_registry.values() if tc.status == STATUS.wait}
-    number_of_tests_to_run = 0
+    number_of_tests_to_run = len(unvisited)
     while unvisited:
-        number_of_tests_to_run += len(unvisited)
         new_unvisited = set()
         for test_case in unvisited:
+            number_of_tests_to_run += int(test_case.status != STATUS.wait)
             test_case.status = STATUS.wait
             new_unvisited.update(test_case.parents)
         unvisited = new_unvisited
