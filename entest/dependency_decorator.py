@@ -1,7 +1,7 @@
 import importlib
 from inspect import getfullargspec
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Set, TypeVar
+from typing import Any, Callable, Dict, List, Optional, Set
 
 from entest.const import STATUS, display
 
@@ -139,7 +139,7 @@ class DependsOn:
 
     def __call__(
         self, *requires: TestCase, previous: bool = None, without: TestCase = None, run_last=False
-    ):
+    ) -> Callable[[Callable], TestCase]:
         """
         For "previous" keyword to work as expected this decorator should be the last one applied.
         "run_last" is a temporary workaround to mark tests that delete important resources.
@@ -161,8 +161,7 @@ class DependsOn:
         return decorator
 
 
-T = TypeVar("T")
-depends_on: Callable[[T], T] = DependsOn()  # type:ignore
+depends_on = DependsOn()
 
 
 def remove_implicit_edges(dfs_path: List[TestCase], logger=print):
