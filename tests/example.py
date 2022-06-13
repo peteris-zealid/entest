@@ -1,6 +1,5 @@
 import tests.project_src as src
 import tests.project_src.internals as src_internals
-
 from entest import STATUS, assert_raises, depends_on
 
 

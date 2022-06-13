@@ -1,5 +1,6 @@
-from entest.dependency_decorator import TEST_ROOT, TestCase
 from io import StringIO
+
+from entest.dependency_decorator import TEST_ROOT, TestCase
 
 
 def mermaid_edges(node: TestCase):
@@ -18,9 +19,13 @@ def mermaid_edges(node: TestCase):
             test_edges.append(f"{node.without.name()} -.- {node_name}")
     return test_edges, teardown_edges
 
+
 output = StringIO()
+
+
 def printer(s, prefix="  "):
     print(prefix, s, file=output)
+
 
 def graph(root=TEST_ROOT):
     visited_nodes = set()
