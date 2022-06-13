@@ -7,6 +7,7 @@ To have all tests implicitly depend on a given test place it closer to the root 
 Use `setup_setup` to take advantage of `depends_on` default behavior. (i.e. for the first decorated function in a module `TEST_ROOT` is taken do be the previous test)
 
 To have a test depend on another test NOT being run use `without` flag. This is usefull for testing error flows.
+** Right now this does not work correctly **
 
 ## Install
 Because I do not know how to package with poetry so that something ends up in the bin folder here are some ad-hoc instructions.
