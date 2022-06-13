@@ -12,6 +12,8 @@ from entest.runner import run_tests
 def echo(*args):
     return print(" ".join(args))
 
+def info(*args):
+    print(*args, file=sys.stderr)
 
 parser = argparse.ArgumentParser(description='Run integration tests.')
 parser.add_argument('paths', type=str, nargs="*", help='files to run')
@@ -26,7 +28,7 @@ def main():
     if args.env:
         os.environ["TEST_ENV_NAME"] = args.env
     paths = [Path(path) for path in args.paths]
-    test_discovery(paths, echo)
+    test_discovery(paths, info)
     if args.graph:
         echo(graph())
         sys.exit(0)
