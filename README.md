@@ -37,5 +37,5 @@ I would like to change a lot of things structure-wise, but API will stay the sam
 ```
 python3 -m entest.cli tests/onboarding_api/test_happy_path.py --graph
 python3 -m entest.cli tests/onboarding_api/test_happy_path.py
-python3 -m entest.cli tests/onboarding_api/test_happy_path.py --env env_name
+python3 -m entest.cli tests/onboarding_api/test_happy_path.py --env env_name tests/spam_users.py
 ```

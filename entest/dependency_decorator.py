@@ -1,7 +1,7 @@
 import importlib
 from inspect import getfullargspec
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Set
+from typing import Any, Callable, Dict, List, Optional, Set, TypeVar
 
 from entest.const import STATUS, display
 
@@ -161,7 +161,8 @@ class DependsOn:
         return decorator
 
 
-depends_on = DependsOn()
+T = TypeVar("T")
+depends_on: Callable[[T], T] = DependsOn()  # type:ignore
 
 
 def remove_implicit_edges(dfs_path: List[TestCase], logger=print):
@@ -177,27 +178,30 @@ def remove_implicit_edges(dfs_path: List[TestCase], logger=print):
     dfs_path.pop()
 
 
-def propogate_status_none():
+def propogate_status_none() -> int:
     unvisited = {tc for tc in TestCase.full_registry.values() if tc.status == STATUS.wait}
+    number_of_tests_to_run = 0
     while unvisited:
+        number_of_tests_to_run += len(unvisited)
         new_unvisited = set()
         for test_case in unvisited:
             test_case.status = STATUS.wait
             new_unvisited.update(test_case.parents)
         unvisited = new_unvisited
+    return number_of_tests_to_run
 
 
 def test_discovery(dirs: List[Path], logger=print):
     logger('Collecting tests')
     if TEST_ROOT.children:
         raise Exception("do not run test_discovery twice")
-    paths = Path('tests').glob("**/*.py")
-    shortlist: Set[Path] = set()
+    paths = list(Path('tests').glob("**/*.py"))
+    shortlist: List[Path] = []
     if dirs:
         for dir in dirs:
-            shortlist.update(dir.glob("**/*.py") if dir.is_dir() else [dir])
+            shortlist.extend(dir.glob("**/*.py") if dir.is_dir() else [dir])
     else:
-        shortlist = set(paths)
+        shortlist = paths
     for path in paths:
         file_contents = path.read_bytes()
         if b"from entest" in file_contents or b"import entest" in file_contents:
@@ -207,7 +211,9 @@ def test_discovery(dirs: List[Path], logger=print):
                 for var in lib.__dict__.values():
                     if isinstance(var, TestCase):
                         var.status = STATUS.wait
+    logger(f'Collected {len(TestCase.full_registry)} tests')
     logger('Removing implicit edges')
     remove_implicit_edges([TEST_ROOT], logger)
     logger('Resolving dependencies')
-    propogate_status_none()
+    number_of_tests_to_run = propogate_status_none()
+    logger(f'Will run {number_of_tests_to_run} tests')
