@@ -1,9 +1,11 @@
 [tool.poetry]
 name = "entest"
-version = "0.1.6"
+version = "0.1.7"
 description = "Write dependaent integration tests. See my pycon talk."
 authors = ["Peteris Ratnieks <peteris.ratnieks@zealid.com>"]
 include = ["entest/py.typed"]
+repository = "https://github.com/peteris-zealid/entest"
+keywords = ["test", "integration-test"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
