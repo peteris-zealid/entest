@@ -4,6 +4,7 @@ version = "0.1.6"
 description = "Write dependaent integration tests. See my pycon talk."
 authors = ["Peteris Ratnieks <peteris.ratnieks@zealid.com>"]
 include = ["entest/py.typed"]
+url = "https://github.com/peteris-zealid/entest"
 
 [tool.poetry.dependencies]
 python = "^3.8"
