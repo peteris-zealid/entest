@@ -18,7 +18,7 @@ I would like to change a lot of things structure-wise, but API will stay the sam
 
 ## Run tests
 ```
-entest tests/onboarding_api/test_happy_path.py --graph
-entest tests/onboarding_api/test_happy_path.py
-entest tests/onboarding_api/test_happy_path.py --env env_name tests/spam_users.py
+entest --graph
+entest
+entest --env env_name tests/spam_users.py
 ```

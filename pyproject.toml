@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "entest"
-version = "0.1.8"
+version = "0.1.9"
 description = "Write dependent integration tests. See my pycon talk."
 authors = ["Peteris Ratnieks <peteris.ratnieks@zealid.com>"]
 readme = "README.md"
