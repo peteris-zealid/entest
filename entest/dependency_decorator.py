@@ -1,4 +1,5 @@
 import importlib
+from os import environ
 from inspect import getfullargspec
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set
@@ -210,6 +211,8 @@ def test_discovery(dirs: List[Path], logger=print):
                 for var in lib.__dict__.values():
                     if isinstance(var, TestCase):
                         var.status = STATUS.wait
+                        if environ.get("ENTEST_SKIP_TEARDOWN", False) and var.run_last:
+                            var.status = STATUS.none
     logger(f'Collected {len(TestCase.full_registry)} tests')
     logger('Removing implicit edges')
     remove_implicit_edges([TEST_ROOT], logger)

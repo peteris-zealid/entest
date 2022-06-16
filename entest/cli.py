@@ -23,6 +23,9 @@ parser.add_argument('--graph', action="store_true", help="Print Mermaid diagram 
 parser.add_argument(
     '--env', default="", help="Sets TEST_ENV_NAME env variable used by env/loader.py"
 )
+parser.add_argument(
+    '--skip-teardown', action="store_true", help="Do not run test cases that have `run_last=True`"
+)
 
 
 def main():
