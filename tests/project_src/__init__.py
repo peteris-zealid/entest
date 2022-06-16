@@ -25,8 +25,10 @@ def deposit(user_id: int, amount: str) -> dict:
 
 
 def order_spam(user_id: int, spam_id: int) -> dict:
-    if users[user_id]["amount"] > 0:
+    if users[user_id]["deposited"] > 0:
         spam_dict[spam_id]["owner"] = user_id
+    else:
+        raise Exception("insufficient_funds")
     return {}
 
 

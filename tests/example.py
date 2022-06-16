@@ -35,7 +35,7 @@ def deposit_money_in_bank(user_id2):
 def order_spam(user_id2, spam_id):
     src.order_spam(user_id2, spam_id)
     spam = src.internals.get_spam(spam_id)
-    assert spam.owner == user_id2
+    assert spam["owner"] == user_id2
 
 
 @depends_on(offer_spam, without=deposit_money_in_bank)
@@ -45,10 +45,10 @@ def order_spam_insufficient_funds(user_id1, user_id2, spam_id):
         message="insufficient_funds",
     )
     spam = src_internals.get_spam(spam_id)
-    assert spam.owner == user_id1
+    assert spam["owner"] == user_id1
 
 
-@depends_on(create_spam)
+@depends_on(create_spam, run_last=True)
 def eat_spam(spam_id, user_id1, user_id2):
     user_id = src.eat_spam(spam_id)
     expected_user_id = user_id2 if order_spam.status == STATUS.passed else user_id1

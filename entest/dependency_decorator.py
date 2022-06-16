@@ -45,7 +45,7 @@ class TestCase:
             raise Exception(
                 "Test is being run before its dependencies have finished running.", self
             )
-        if self.without and self.without.status != STATUS.none:
+        if self.without and self.without.status not in [STATUS.none, STATUS.wait]:
             raise Exception(
                 f"Test ({self.without}) is not allowed to be run before this test.",
                 "See 'without' flag for more info.",

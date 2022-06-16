@@ -1,4 +1,5 @@
 from typing import Callable
+from collections import defaultdict
 import random
 
 from entest.const import STATUS
@@ -20,12 +21,22 @@ def bogo_order(seed: int=0):
     random.seed(seed)
     order = []
     unvisited = [test for test in TestCase.full_registry.values()]
+    danger_zone = defaultdict(int)
+    for test in filter(lambda test: test.without, unvisited):
+        danger_zone[test.without] += 1
     while unvisited:
         random.shuffle(unvisited)
+        start_len = len(unvisited)
         for test in unvisited:
-            if all(parent in order for parent in test.parents):
+            if all(parent in order for parent in test.parents) and danger_zone[test] <= 0:
                 order.append(test)
                 unvisited.remove(test)
+                danger_zone[test.without] -= 1
+        if len(unvisited) == start_len:
+            raise Exception(
+                "Impossible to traverse all graph nodes. Use --graph to review dependencies",
+            )
+    order.sort(key=lambda test_case: int(test_case.run_last))
     return order
 
 def generate_run_sequence(*, strategy=bogo_order):

@@ -32,6 +32,8 @@ def main():
     args = parser.parse_args()
     if args.env:
         os.environ["TEST_ENV_NAME"] = args.env
+    if args.skip_teardown:
+        os.environ["ENTEST_SKIP_TEARDOWN"] = "yes"
     paths = [Path(path) for path in args.paths]
     test_discovery(paths, info)
     if args.graph:
