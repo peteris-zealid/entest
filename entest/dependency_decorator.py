@@ -1,4 +1,5 @@
 import importlib
+import traceback
 from os import environ
 from inspect import getfullargspec
 from pathlib import Path
@@ -43,7 +44,9 @@ class TestCase:
             return False
         if any((test.status not in [STATUS.passed, STATUS.wip] for test in self.parents)):
             raise Exception(
-                "Test is being run before its dependencies have finished running.", self
+                "Test is being run before its dependencies have finished running.",
+                self,
+                self.parents,
             )
         if self.without and self.without.status not in [STATUS.none, STATUS.wait]:
             raise Exception(
@@ -133,10 +136,11 @@ def setup_setup(callback: Callable[[], None]) -> None:
 
 
 class DependsOn:
-    LAST_DECORATED = TEST_ROOT
 
     def __init__(self):
         self.fixtures = {}
+        self.last_file_handled = ""
+        self.last_decorated = TEST_ROOT
 
     def __call__(
         self, *requires: TestCase, previous: bool = None, without: TestCase = None, run_last=False
@@ -149,14 +153,19 @@ class DependsOn:
         if previous is None:
             previous = len(requires) == 0
 
+        # -1 is the current file "dependency_decorator.py" and -2 is the one we want
+        current_file = traceback.extract_stack()[-2].filename
+        if current_file != self.last_file_handled:
+            self.last_file_handled = current_file
+            self.last_decorated = TEST_ROOT
         def decorator(func):
             parents = list(requires)
             if previous:
-                parents.append(DependsOn.LAST_DECORATED)
+                parents.append(self.last_decorated)
             test_case = TestCase(func, parents, run_last=run_last)
             if without:
                 test_case.without = without
-            DependsOn.LAST_DECORATED = test_case
+            self.last_decorated = test_case
             return test_case
 
         return decorator
@@ -205,7 +214,6 @@ def test_discovery(dirs: List[Path], logger=print):
     for path in paths:
         file_contents = path.read_bytes()
         if b"from entest" in file_contents or b"import entest" in file_contents:
-            DependsOn.LAST_DECORATED = TEST_ROOT
             lib = importlib.import_module(str(path).replace("/", ".")[:-3])
             if path in shortlist:
                 for var in lib.__dict__.values():
