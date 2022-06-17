@@ -1,4 +1,5 @@
 import random
+import threading
 import time
 
 try:
@@ -37,8 +38,15 @@ def rich_panel(order):
             time.sleep(0.4)
             live.update(generate_table(order))
 
-def panel(order, logger):
-    if IS_RICH:
-        rich_panel(order)
-    else:
-        poor_panel(order, logger)
+class StatusPanel:
+    def __init__(self, order, logger):
+        if IS_RICH:
+            self.thread = threading.Thread(target=rich_panel, args=(order,))
+        else:
+            self.thread = threading.Thread(target=poor_panel, args=(order, logger))
+
+    def __enter__(self):
+        self.thread.start()
+
+    def __exit__(self, *args):
+        self.thread.join(timeout=1)
