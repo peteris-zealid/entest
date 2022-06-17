@@ -1,3 +1,4 @@
+import time
 import tests.project_src as src
 import tests.project_src.internals as src_internals
 from entest import STATUS, assert_raises, depends_on
@@ -35,6 +36,7 @@ def deposit_money_in_bank(user_id2):
 def order_spam(user_id2, spam_id):
     src.order_spam(user_id2, spam_id)
     spam = src.internals.get_spam(spam_id)
+    time.sleep(2)
     assert spam["owner"] == user_id2
 
 
@@ -52,6 +54,7 @@ def order_spam_insufficient_funds(user_id1, user_id2, spam_id):
 def eat_spam(spam_id, user_id1, user_id2):
     user_id = src.eat_spam(spam_id)
     expected_user_id = user_id2 if order_spam.status == STATUS.passed else user_id1
+    time.sleep(2)
     assert user_id == expected_user_id
 
 

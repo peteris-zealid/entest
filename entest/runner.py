@@ -1,9 +1,11 @@
 from typing import Callable
 from collections import defaultdict
 import random
+import threading
 
 from entest.const import STATUS
 from entest.dependency_decorator import TEST_ROOT, TestCase
+from entest.status_report import panel
 
 
 def breadth_first_traverse(root: TestCase=TEST_ROOT):
@@ -46,9 +48,12 @@ def generate_run_sequence(*, strategy=bogo_order):
 
 def run_tests(logger: Callable[..., None]):
     logger("""=============== Running tests ===============""")
-    for test in generate_run_sequence():
+    test_order = generate_run_sequence()
+    thread = threading.Thread(target=panel, args=(test_order, logger))
+    thread.start()
+    for test in test_order:
         test()
-        logger(test.display())
+    thread.join(timeout=1)
     logger("""=================== ERRORS ==================""")
     logger("\n".join(TestCase.error_summary()))
     logger("""================== Summary ==================""")
