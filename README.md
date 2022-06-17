@@ -8,6 +8,8 @@ Use `setup_setup` to take advantage of `depends_on` default behavior. (i.e. for 
 
 To have a test depend on another test NOT being run use `without` flag. This is usefull for testing error flows.
 
+Optionally install `rich` for nicer output.
+
 ## Contributing
 Please do not maintain a fork! Make a pull request and if it is not obviously bad I will merge it in a timely manner.
 
