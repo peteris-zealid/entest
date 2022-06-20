@@ -1,11 +1,12 @@
 import importlib
 import traceback
-from os import environ
 from inspect import getfullargspec
+from os import environ
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set
 
 from entest.const import STATUS, display
+from entest.status_report import format_error
 
 
 class TestCase:
@@ -116,12 +117,13 @@ class TestCase:
             ]
 
     @classmethod
-    def error_summary(cls):
-        return [
-            f"""===== {test.name()} =====\n{test.error}\n"""
-            for test in cls.full_registry.values()
-            if test.error is not None
-        ]
+    def print_error_summary(cls, logger=print) -> None:
+        for test in cls.full_registry.values():
+            if test.error is None:
+                continue
+            logger(f"""===== {test.name()} =====""")
+            logger(format_error(test.error))
+            logger()
 
 
 def empty_setup():
@@ -136,7 +138,6 @@ def setup_setup(callback: Callable[[], None]) -> None:
 
 
 class DependsOn:
-
     def __init__(self):
         self.fixtures = {}
         self.last_file_handled = ""
@@ -158,6 +159,7 @@ class DependsOn:
         if current_file != self.last_file_handled:
             self.last_file_handled = current_file
             self.last_decorated = TEST_ROOT
+
         def decorator(func):
             parents = list(requires)
             if previous:

@@ -1,13 +1,13 @@
-from typing import Callable
-from collections import defaultdict
 import random
+from collections import defaultdict
+from typing import Callable
 
 from entest.const import STATUS
 from entest.dependency_decorator import TEST_ROOT, TestCase
 from entest.status_report import StatusPanel
 
 
-def breadth_first_traverse(root: TestCase=TEST_ROOT):
+def breadth_first_traverse(root: TestCase = TEST_ROOT):
     order = []
     nodes = [root]
     current_depth = 0
@@ -18,7 +18,8 @@ def breadth_first_traverse(root: TestCase=TEST_ROOT):
     order.sort(key=lambda test_case: int(test_case.run_last))
     return order
 
-def bogo_order(seed: int=0):
+
+def bogo_order(seed: int = 0):
     random.seed(seed)
     order = []
     unvisited = [test for test in TestCase.full_registry.values()]
@@ -40,6 +41,7 @@ def bogo_order(seed: int=0):
     order.sort(key=lambda test_case: int(test_case.run_last))
     return order
 
+
 def generate_run_sequence(*, strategy=bogo_order):
     order = strategy()
     return [tc for tc in order if tc.status == STATUS.wait]
@@ -52,6 +54,6 @@ def run_tests(logger: Callable[..., None]):
         for test in test_order:
             test()
     logger("""=================== ERRORS ==================""")
-    logger("\n".join(TestCase.error_summary()))
+    TestCase.print_error_summary(logger)
     logger("""================== Summary ==================""")
     logger("\n".join(TestCase.summary()))

@@ -7,15 +7,7 @@ from pathlib import Path
 from entest.dependency_decorator import test_discovery
 from entest.graph import graph
 from entest.runner import run_tests
-
-
-def echo(*args):
-    return print(" ".join(args))
-
-
-def info(*args):
-    print(*args, file=sys.stderr)
-
+from entest.status_report import logger, stderr_logger
 
 parser = argparse.ArgumentParser(description='Run integration tests.')
 parser.add_argument('paths', type=str, nargs="*", help='files to run')
@@ -35,11 +27,11 @@ def main():
     if args.skip_teardown:
         os.environ["ENTEST_SKIP_TEARDOWN"] = "yes"
     paths = [Path(path) for path in args.paths]
-    test_discovery(paths, info)
+    test_discovery(paths, stderr_logger)
     if args.graph:
-        echo(graph())
+        logger(graph())
         sys.exit(0)
-    run_tests(echo)
+    run_tests(logger)
     sys.exit(0)
 
 
