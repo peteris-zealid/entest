@@ -3,7 +3,7 @@ import traceback
 from inspect import getfullargspec
 from os import environ
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Set
+from typing import Any, Callable, Dict, List, Optional
 
 from entest.const import STATUS, display
 from entest.status_report import format_error

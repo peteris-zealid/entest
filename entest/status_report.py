@@ -1,7 +1,7 @@
-import random
 import threading
 import time
 from sys import stderr
+from traceback import format_tb
 
 try:
     from rich.console import Console
@@ -83,6 +83,4 @@ def format_error(error: Exception):
     if IS_RICH:
         return Traceback(Traceback.extract(type(error), error, error.__traceback__))
     else:
-        from traceback import format_tb
-
         return type(error).__name__ + "\n" + "".join(format_tb(error.__traceback__))
