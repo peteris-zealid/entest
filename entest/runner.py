@@ -1,5 +1,7 @@
 import random
+import threading
 from collections import defaultdict
+from os import abort
 from typing import Callable
 
 from entest.const import STATUS
@@ -55,5 +57,20 @@ def run_tests(logger: Callable[..., None]):
             test()
     logger("""=================== ERRORS ==================""")
     TestCase.print_error_summary(logger)
+    join_dangling_threads(logger)
     logger("""================== Summary ==================""")
     logger("\n".join(TestCase.summary()))
+
+def join_dangling_threads(logger: Callable[..., None]) -> None:
+    thread_count = threading.active_count() - 1
+    if thread_count == 0:
+        return
+    logger(f"Found {thread_count} dangling threads.")
+    for thread in threading.enumerate():
+        if thread is threading.current_thread():
+            continue
+        else:
+            thread.join(timeout=10)
+            if thread.is_alive:
+                logger("Some non-daemon threads could not be joined.", flush=True)
+                abort()
