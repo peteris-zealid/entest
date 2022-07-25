@@ -61,6 +61,7 @@ def run_tests(logger: Callable[..., None]):
     logger("""================== Summary ==================""")
     logger("\n".join(TestCase.summary()))
 
+
 def join_dangling_threads(logger: Callable[..., None]) -> None:
     thread_count = threading.active_count() - 1
     if thread_count == 0:
