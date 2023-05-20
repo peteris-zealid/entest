@@ -11,6 +11,7 @@ from entest.status_report import format_error
 
 class TestCase:
     full_registry: Dict[str, "TestCase"] = {}
+    snoop_decorator: Callable[[Callable], Callable] = lambda self, x: x
     dynamic_globals: Dict[str, Any] = {}
     children: List["TestCase"]
     without: Optional["TestCase"]
@@ -61,7 +62,9 @@ class TestCase:
         if missing_globals:
             raise Exception("Cannot run test. Some globals are missing", missing_globals)
         try:
-            new_globals = self.func(*[self.dynamic_globals[key] for key in required_globals])
+            new_globals = self.snoop_decorator(self.func)(
+                *[self.dynamic_globals[key] for key in required_globals]
+            )
         except Exception as err:
             self.status = STATUS.error
             self.error = err

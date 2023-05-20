@@ -7,11 +7,19 @@ from pathlib import Path
 from entest.dependency_decorator import test_discovery
 from entest.graph import graph
 from entest.runner import run_tests
+from entest.snoop import setup_snooper
 from entest.status_report import logger, stderr_logger
 
 parser = argparse.ArgumentParser(description='Run integration tests.')
 parser.add_argument('paths', type=str, nargs="*", help='files to run')
 parser.add_argument('--graph', action="store_true", help="Print Mermaid diagram of the test tree")
+parser.add_argument(
+    '--snoop',
+    default="",
+    const="std",
+    nargs="?",
+    help="Print automatic debugging to a file or terminal if no file is provided",
+)
 parser.add_argument(
     '--env', default="", help="Sets TEST_ENV_NAME env variable used by env/loader.py"
 )
@@ -26,6 +34,8 @@ def main():
         os.environ["TEST_ENV_NAME"] = args.env
     if args.skip_teardown:
         os.environ["ENTEST_SKIP_TEARDOWN"] = "yes"
+    if args.snoop:
+        setup_snooper(args.snoop)
     paths = [Path(path) for path in args.paths]
     test_discovery(paths, stderr_logger)
     if args.graph:

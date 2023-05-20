@@ -9,7 +9,7 @@ https://www.ganjing.com/video/1fic7807r1p1YVbLCkn4uytkJ1c11c
 
 ## Installing
 ```
-pip install entest[rich]
+pip install entest[all]
 ```
 
 ## Documentation
@@ -47,3 +47,8 @@ entest
 entest --skip-teardown
 entest --env env_name tests/spam_users.py
 ```
+
+## Roadmap
+- Better error output with `stackprinter`.
+- Verbose mode that automatically applies `pySnooper` or `cyberbrain`.
+- An `init` command that sets up the tests folder with env subfolder.
