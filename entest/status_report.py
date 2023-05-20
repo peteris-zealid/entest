@@ -14,6 +14,13 @@ except ImportError:
     IS_RICH = False
     Table = None
 
+try:
+    import stackprinter
+
+    IS_STACKPRINTER = True
+except ImportError:
+    stackprinter = None
+    IS_STACKPRINTER = False
 from entest.const import STATUS, display
 
 if IS_RICH:
@@ -80,6 +87,8 @@ class StatusPanel:
 
 
 def format_error(error: Exception):
+    if IS_STACKPRINTER:
+        return stackprinter.format(error, style="darkbg3")
     if IS_RICH:
         return Traceback(Traceback.extract(type(error), error, error.__traceback__))
     else:

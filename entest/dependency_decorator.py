@@ -3,10 +3,13 @@ import traceback
 from inspect import getfullargspec
 from os import environ
 from pathlib import Path
+from sys import stderr
 from typing import Any, Callable, Dict, List, Optional
 
 from entest.const import STATUS, display
 from entest.status_report import format_error
+
+PRINT_TO_STDERR = lambda *args, **kwargs: print(*args, **kwargs, file=stderr)
 
 
 class TestCase:
@@ -28,7 +31,7 @@ class TestCase:
         self.without = None
         self.status = STATUS.none
         if self.func.__name__ in self.full_registry:
-            print("warning: a test with this name already exists")
+            PRINT_TO_STDERR("warning: a test with this name already exists")
         self.full_registry[self.func.__name__] = self
         if parents:
             self.depth: int = max((parent.depth for parent in parents)) + 1
@@ -120,7 +123,7 @@ class TestCase:
             ]
 
     @classmethod
-    def print_error_summary(cls, logger=print) -> None:
+    def print_error_summary(cls, logger) -> None:
         for test in cls.full_registry.values():
             if test.error is None:
                 continue
@@ -179,7 +182,7 @@ class DependsOn:
 depends_on = DependsOn()
 
 
-def remove_implicit_edges(dfs_path: List[TestCase], logger=print):
+def remove_implicit_edges(dfs_path: List[TestCase], logger=PRINT_TO_STDERR):
     head = dfs_path[-1]
     for child in head.children:
         for parent in dfs_path[:-1]:
@@ -205,7 +208,7 @@ def propogate_status_none() -> int:
     return number_of_tests_to_run
 
 
-def test_discovery(dirs: List[Path], logger=print):
+def test_discovery(dirs: List[Path], logger=PRINT_TO_STDERR):
     logger('Collecting tests')
     if TEST_ROOT.children:
         raise Exception("do not run test_discovery twice")

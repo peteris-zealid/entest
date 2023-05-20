@@ -6,7 +6,7 @@ from typing import Callable
 
 from entest.const import STATUS
 from entest.dependency_decorator import TEST_ROOT, TestCase
-from entest.status_report import StatusPanel
+from entest.status_report import IS_STACKPRINTER, StatusPanel
 
 
 def breadth_first_traverse(root: TestCase = TEST_ROOT):
@@ -56,7 +56,8 @@ def run_tests(logger: Callable[..., None]):
         for test in test_order:
             test()
     logger("""=================== ERRORS ==================""")
-    TestCase.print_error_summary(logger)
+    # It is an ugly hack to use IS_STACKPRINTER here but logging should be refactored in general
+    TestCase.print_error_summary(logger if not IS_STACKPRINTER else print)
     join_dangling_threads(logger)
     logger("""================== Summary ==================""")
     logger("\n".join(TestCase.summary()))
