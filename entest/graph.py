@@ -30,7 +30,11 @@ def printer(s, prefix="  "):
 
 
 def graph(root=TEST_ROOT):
-    unvisited_nodes = set(filter_nodes(root.children))
+    eligible_tests = filter_nodes(root.children)
+    print(eligible_tests)
+    if len(eligible_tests) == 0:
+        return ""
+    unvisited_nodes = set(eligible_tests)
     test_edges = []
     teardown_edges = []
     visited_nodes = {root}
@@ -46,10 +50,11 @@ def graph(root=TEST_ROOT):
     for edge in test_edges:
         printer(edge)
     printer("end")
-    printer("subgraph teardown")
-    for edge in teardown_edges:
-        printer(edge)
-    printer("end")
+    if len(teardown_edges) > 0:
+        printer("subgraph teardown")
+        for edge in teardown_edges:
+            printer(edge)
+        printer("end")
     return output.getvalue()
 
 def filter_nodes(nodes: List["TestCase"]):
