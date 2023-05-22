@@ -45,7 +45,7 @@ I would like to change a lot of things structure-wise, but API will stay the sam
 entest --graph
 entest
 entest --skip-teardown
-entest --env env_name tests/spam_users.py
+entest --env env_name tests/example.py --snoop
 ```
 
 ## Roadmap
