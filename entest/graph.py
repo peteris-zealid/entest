@@ -1,6 +1,8 @@
 from io import StringIO
+from typing import List
 
 from entest.dependency_decorator import TEST_ROOT, TestCase
+from entest.const import STATUS
 
 
 def mermaid_edges(node: TestCase):
@@ -28,10 +30,14 @@ def printer(s, prefix="  "):
 
 
 def graph(root=TEST_ROOT):
-    visited_nodes = set()
-    unvisited_nodes = {root}
+    eligible_tests = filter_nodes(root.children)
+    print(eligible_tests)
+    if len(eligible_tests) == 0:
+        return ""
+    unvisited_nodes = set(eligible_tests)
     test_edges = []
     teardown_edges = []
+    visited_nodes = {root}
     while unvisited_nodes:
         node = unvisited_nodes.pop()
         visited_nodes.add(node)
@@ -44,8 +50,12 @@ def graph(root=TEST_ROOT):
     for edge in test_edges:
         printer(edge)
     printer("end")
-    printer("subgraph teardown")
-    for edge in teardown_edges:
-        printer(edge)
-    printer("end")
+    if len(teardown_edges) > 0:
+        printer("subgraph teardown")
+        for edge in teardown_edges:
+            printer(edge)
+        printer("end")
     return output.getvalue()
+
+def filter_nodes(nodes: List["TestCase"]):
+    return [node for node in nodes if node.status != STATUS.none]
