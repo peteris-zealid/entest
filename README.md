@@ -26,14 +26,16 @@ To have a test depend on another test NOT being run use `without` flag. This is 
 Please do not maintain a fork! Make a pull request and if it is not obviously bad I will merge it in a timely manner.
 
 ```
-python3 -m venv venv
-. venv/bin/activate
+python3 -m venv .venv
+. .venv/bin/activate
 pip install poetry
 poetry install
 echo "
 export PYTHONPATH=$PWD
 alias entest="python3 ./entest/cli.py"
-"
+" >> .venv/bin/activate
+export PYTHONPATH=$PWD
+alias entest="python3 ./entest/cli.py"
 ```
 
 I would like to change a lot of things structure-wise, but API will stay the same. In particular:
