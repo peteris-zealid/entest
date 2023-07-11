@@ -4,7 +4,8 @@ import os
 import sys
 from pathlib import Path
 
-from entest.dependency_decorator import test_discovery
+from entest.const import STATUS
+from entest.dependency_decorator import TestCase, test_discovery
 from entest.graph import graph
 from entest.runner import run_tests
 from entest.snoop import setup_snooper
@@ -42,7 +43,7 @@ def main():
         logger(graph())
         sys.exit(0)
     run_tests(logger)
-    sys.exit(0)
+    sys.exit(TestCase.summary(as_dict=True)[STATUS.error])
 
 
 if __name__ == '__main__':

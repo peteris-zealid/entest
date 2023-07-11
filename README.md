@@ -7,6 +7,9 @@ This lib provides a convenient way to explicitly define dependency relationships
 For how that would look like practically see `tests/example.py`. This code is referred to in my PyCon talk.
 https://www.ganjing.com/video/1fic7807r1p1YVbLCkn4uytkJ1c11c
 
+### Demo
+[![asciicast](https://asciinema.org/a/594488.svg)](https://asciinema.org/a/594488)
+
 ## Installing
 ```
 pip install entest[all]
