@@ -55,14 +55,15 @@ def generate_table(order: list) -> Table:
 def poor_panel(order, logger):
     pending_tests = order.copy()
     while any(test.status in (STATUS.wait, STATUS.running) for test in order):
-        just_finished_tests = filter(
-            lambda test: test.status not in (STATUS.wait, STATUS.running),
-            pending_tests,
-        )
+        just_finished_tests = [
+            test for test in pending_tests if test.status not in (STATUS.wait, STATUS.running)
+        ]
         for test in just_finished_tests:
             logger(test.display())
             pending_tests.remove(test)
         time.sleep(0.4)
+    for test in pending_tests:  # print remaining after all tests finish
+        logger(test.display())
 
 
 def rich_panel(order):
