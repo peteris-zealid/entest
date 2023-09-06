@@ -16,11 +16,10 @@ custom_order = [
     "delete_user",
 ]
 
+
 class Conftest:
     def get_testing_order(self, tests_to_be_run):
         order = [None] * len(custom_order)
         for test in tests_to_be_run:
             order[custom_order.index(test.func.__name__)] = test
         return list(filter(None, order))
-
-

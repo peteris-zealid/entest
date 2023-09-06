@@ -1,12 +1,13 @@
 import random
 from collections import defaultdict
-from typing import List
 from sys import exit
+from typing import List
 
 try:
     from tests.conftest import Conftest as UserConftest
 except ImportError:
-    print("""
+    print(
+        """
         You need to define conftest.py in your tests/ folder.
         The file should include a class Conftest that does not inherit anything.
         You can use super() to access the default method definitions.
@@ -16,12 +17,14 @@ except ImportError:
 class Conftest:
     pass
 
-    """)
+    """
+    )
     exit(5)
 
 
 class DefaultConftest:
     RANDOM_SEED = 1
+
     def __init__(self) -> None:
         random.seed(self.RANDOM_SEED)
 

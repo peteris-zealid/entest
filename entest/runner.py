@@ -2,8 +2,8 @@ import threading
 from os import abort
 from typing import Callable
 
-from entest.const import STATUS
 from entest.conftest import conftest
+from entest.const import STATUS
 from entest.dependency_decorator import TEST_ROOT, TestCase
 from entest.status_report import IS_STACKPRINTER, StatusPanel
 

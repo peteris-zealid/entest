@@ -25,6 +25,27 @@ Use `setup_setup` to take advantage of `depends_on` default behavior. (i.e. for 
 
 To have a test depend on another test NOT being run use `without` flag. This is usefull for testing error flows.
 
+### Conftest
+The file tests/conftest.py must be created with a class Conftest in it.
+It is fine for the class to be a dummy (like this):
+```
+class Conftest:
+    pass
+```
+It can be used to define a custom order for tests like this.
+```
+custom_order = ["test_1", "test_2", "test_3"]
+
+class Conftest:
+    def get_testing_order(self, tests_to_be_run):
+        order = [None] * len(custom_order)
+        for test in tests_to_be_run:
+            order[custom_order.index(test.func.__name__)] = test
+        return list(filter(None, order))
+```
+More functionality will be added in the future.
+
+
 ## Contributing
 Please do not maintain a fork! Make a pull request and if it is not obviously bad I will merge it in a timely manner.
 
